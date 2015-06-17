@@ -12,8 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +39,7 @@ import java.util.List;
  */
 public class MainActivityFragment extends Fragment {
 
-    ArrayAdapter<String> adapter;
+    ArrayAdapter<String> mForecastAdapter;
 
     public MainActivityFragment() {
     }
@@ -62,9 +64,17 @@ public class MainActivityFragment extends Fragment {
                 "Sun 6/29 - Sunny - 20/7"
         };
         List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForecast);
+        mForecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForecast);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
-        listView.setAdapter(adapter);
+        listView.setAdapter(mForecastAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String data = (String)adapterView.getItemAtPosition(i);
+                String data1  = mForecastAdapter.getItem(i);
+                Toast.makeText(getActivity(),"Item: "+data,Toast.LENGTH_LONG).show();
+            }
+        });
         return rootView;
     }
 
@@ -155,7 +165,7 @@ public class MainActivityFragment extends Fragment {
                     }
                 }
             }
-            Log.v(LOG_TEXT, "Forecast response: " + forecastJsonStr);
+            //Log.v(LOG_TEXT, "Forecast response: " + forecastJsonStr);
             String [] result = null;
             try {
                 result =  getWeatherDataFromJson(forecastJsonStr,numDays);
@@ -164,6 +174,16 @@ public class MainActivityFragment extends Fragment {
             }
             //return forecastJsonStr;
             return result;
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+            if(result!=null){
+                mForecastAdapter.clear();
+                for(String forecastData : result){
+                    mForecastAdapter.add(forecastData);
+                }
+            }
         }
     }
 
@@ -261,9 +281,9 @@ public class MainActivityFragment extends Fragment {
             resultStrs[i] = day + " - " + description + " - " + highAndLow;
         }
 
-        for (String s : resultStrs) {
+        /*for (String s : resultStrs) {
             Log.v("ForeCast Testing", "Forecast entry: " + s);
-        }
+        }*/
         return resultStrs;
 
     }
