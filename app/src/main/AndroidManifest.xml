@@ -35,6 +35,9 @@
                 android:value=".MainActivity"
                 ></meta-data>
         </activity>
+        <provider
+            android:authorities="com.udacity.sunshine"
+            android:name=".data.WeatherProvider"/>
     </application>
 
 </manifest>
