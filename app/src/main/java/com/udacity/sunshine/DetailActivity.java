@@ -1,8 +1,11 @@
 package com.udacity.sunshine;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
@@ -31,7 +34,7 @@ public class DetailActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-        mForecastStr = getIntent().getStringExtra("forecastData");
+        mForecastStr = getIntent().getDataString();
     }
 
 
@@ -67,7 +70,7 @@ public class DetailActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
         public PlaceholderFragment() {
         }
@@ -78,9 +81,31 @@ public class DetailActivity extends ActionBarActivity {
 
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
             TextView dataView = (TextView)rootView.findViewById(R.id.forecastDataVw);
-            String forecastData = getActivity().getIntent().getStringExtra("forecastData");
+            String forecastData = getActivity().getIntent().getDataString();
             dataView.setText(forecastData);
             return rootView;
+        }
+
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            getLoaderManager().initLoader(0,null,this);
+
+        }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            return null;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
         }
     }
     private Intent createShareForecastIntent() {
