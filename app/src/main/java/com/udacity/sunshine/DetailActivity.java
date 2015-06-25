@@ -86,6 +86,7 @@ public class DetailActivity extends ActionBarActivity {
             super.onCreate(savedInstanceState);
             setHasOptionsMenu(true);
         }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -104,7 +105,7 @@ public class DetailActivity extends ActionBarActivity {
         }
 
         @Override
-        public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             // Inflate the menu; this adds items to the action bar if it is present.
             inflater.inflate(R.menu.detail, menu);
             MenuItem item = menu.findItem(R.id.action_share);
@@ -134,14 +135,14 @@ public class DetailActivity extends ActionBarActivity {
 
             String desc = data.getString(COL_WEATHER_DESC);
             boolean isMetric = Utility.isMetric(getActivity());
-            String maxTemp = Utility.formatTemperature(data.getDouble(COL_WEATHER_MAX_TEMP),
+            String maxTemp = Utility.formatTemperature(getActivity(), data.getDouble(COL_WEATHER_MAX_TEMP),
                     isMetric);
-            String minTemp = Utility.formatTemperature(data.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
+            String minTemp = Utility.formatTemperature(getActivity(), data.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
 
 
             mForecastStr = String.format("%s - %s - %s/%s", date, desc, maxTemp, minTemp);
 
-            TextView detailTextView = (TextView)getView().findViewById(R.id.forecastDataVw);
+            TextView detailTextView = (TextView) getView().findViewById(R.id.forecastDataVw);
             detailTextView.setText(mForecastStr);
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
