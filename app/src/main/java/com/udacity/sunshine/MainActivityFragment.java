@@ -60,11 +60,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public MainActivityFragment() {
     }
 
-    @Override
+    /*@Override
     public void onStart() {
         super.onStart();
         updateWeather();
-    }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,5 +161,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mForecastAdapter.swapCursor(null);
+    }
+
+    public void onLocationChanged(){
+        updateWeather();
+        getLoaderManager().restartLoader(FORECAST_LOADER,null,this);
     }
 }
