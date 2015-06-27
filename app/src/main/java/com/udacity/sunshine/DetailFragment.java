@@ -2,6 +2,7 @@ package com.udacity.sunshine;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -27,6 +28,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private String mForecastStr;
     ShareActionProvider mActionProvider;
     private static final int DETAIL_LOADER = 0;
+    static final String DETAIL_URI = "URI";
+    private Uri mUri;
 
     public DetailFragment() {
     }
@@ -81,6 +84,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+        }
+
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
            /* TextView dataView = (TextView) rootView.findViewById(R.id.forecastDataVw);
             String forecastData = getActivity().getIntent().getDataString();
@@ -117,12 +125,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Intent intent = getActivity().getIntent();
-        if (intent == null) {
+        /*Intent intent = getActivity().getIntent();
+        if (intent == null || intent.getData() == null) {
             return null;
+        }*/
+        if (mUri!=null) {
+            CursorLoader c = new CursorLoader(getActivity(), mUri, DETAIL_COLUMNS, null, null, null);
+            return c;
         }
-        CursorLoader c = new CursorLoader(getActivity(), intent.getData(), DETAIL_COLUMNS, null, null, null);
-        return c;
+        return null;
     }
 
     @Override
@@ -190,5 +201,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         shareIntent.putExtra(Intent.EXTRA_TEXT,
                 mForecastStr + FORECAST_SHARE_HASHTAG);
         return shareIntent;
+    }
+
+    void onLocationChanged(String newLocation) {
+        // replace the uri, since the location has changed
+        Uri uri = mUri;
+        if (null != uri) {
+            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+            Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
+            mUri = updatedUri;
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
     }
 }
