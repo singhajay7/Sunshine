@@ -5,6 +5,7 @@
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="horizontal"
+    android:background="@drawable/touch_selector"
     android:padding="16dp">
 
     <LinearLayout
@@ -44,7 +45,7 @@
             android:id="@+id/list_item_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/draw" />
+             />
 
         <TextView
             android:id="@+id/list_item_forecast_textview"

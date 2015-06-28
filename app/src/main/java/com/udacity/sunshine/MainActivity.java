@@ -43,7 +43,12 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
             }
         } else {
             mTwoPane = false;
+            getSupportActionBar().setElevation(0f);
         }
+
+        MainActivityFragment forecastFragment = (MainActivityFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_forecast);
+        forecastFragment.setUseTodayLayout(!mTwoPane);
     }
 
     @Override
