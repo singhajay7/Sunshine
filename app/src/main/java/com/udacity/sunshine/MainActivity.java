@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.udacity.sunshine.sync.SunshineSyncAdapter;
+
 
 public class MainActivity extends ActionBarActivity implements MainActivityFragment.Callback {
 
@@ -49,6 +51,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
         MainActivityFragment forecastFragment = (MainActivityFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast);
         forecastFragment.setUseTodayLayout(!mTwoPane);
+        SunshineSyncAdapter.initializeSyncAdapter(this);
     }
 
     @Override

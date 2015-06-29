@@ -1,4 +1,8 @@
 <resources xmlns:xliff="http://schemas.android.com/tools">
+
+    <string name="sync_account_type">sunshine.example.com</string>
+    <string name="content_authority">com.udacity.sunshine</string>
+
     <string name="app_name">Sunshine</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
